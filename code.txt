@@ -1,1 +1,73 @@
-If you see this it works
+// 2021005878, CHRISTIAN OLIVER L. CELDA
+// 6/1/2023 1:30 PM
+
+import java.util.Scanner;
+
+// Ini nga klase nagadeklara sang exception nga ginatapon kon ang edad sang amay gamay ukon kaparehas sa zero, ukon ang edad sang anak dako ukon kaparehas sa edad sang amay.
+class WrongAge extends Exception {
+    public String toString() {
+        return "Please enter the right age.";
+    }
+}
+
+// Ini nga klase nagadeklara sang Amay may edad.
+class Father {
+    int age;
+
+    // Ang constructor nagabaton sang edad kag ginatugyan ini sa amay.
+    Father(int age) {
+        this.age = age;
+    }
+}
+
+// Ini nga klase nagadeklara sang Anak, nga isa ka subclass sang Amay. Luwas sa may edad parehas sang Amay, ang Anak may sonAge man.
+class Son extends Father {
+    int sonAge;
+
+    // Ang constructor nagabaton sang duha ka edad: ang edad sang amay, nga ginapasa sa constructor sang superclass, kag ang edad sang anak, nga ginatago sa sini nga klase.
+    Son(int fatherAge, int sonAge) {
+        super(fatherAge);
+        this.sonAge = sonAge;
+    }
+}
+
+// Ini nga klase may yara sang main method nga nagakomposo sang programa.
+class Main {
+    public static void main(String args[]) {
+        // Maghimo sang scanner para magbasa sang input.
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Magpangayo kag magbasa sang edad sang amay.
+            System.out.print("Enter Father's age: ");
+            int fatherAge = scanner.nextInt();
+
+            // Magpangayo kag magbasa sang edad sang anak.
+            System.out.print("Enter Son's age: ");
+            int sonAge = scanner.nextInt();
+
+            // Check the ages to ensure they're valid. If they're not, throw an exception.
+            if (fatherAge <= 0 || sonAge >= fatherAge) {
+                throw new WrongAge();
+            } else {
+                // Maghimo sang bag-o nga Amay kag Anak nga may ginhatag nga edad.
+                Father father = new Father(fatherAge);
+                Son son = new Son(fatherAge, sonAge);
+
+                // Magprint sang edad sang amay kag sang anak.
+                System.out.println("Father age: " + father.age);
+                System.out.println("Son age: " + son.sonAge);
+            }
+
+        } catch (WrongAge e) {
+            // Kon may ginatapon nga WrongAge exception, magprint sang error message.
+            System.out.println("Error: " + e.toString());
+        } catch (Exception e) {
+            // Kon may iban nga exception nga ginatapon (halimbawa, kon may non-integer nga gin-input para sa edad), magprint sang lain nga error message.
+            System.out.println("Error: Invalid input.");
+        } finally {
+            // Pagkatapos gamiton ang scanner, isara ini.
+            scanner.close();
+        }
+    }
+}
